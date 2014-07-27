@@ -6,6 +6,10 @@ class CalculatorController < ApplicationController
 		router = Router.new(calc)
 		result=router.map(parser)
      	@state = calc.state
-     	# render "index"
-	end
+      render "index"
+  end
+
+  def index
+    @state = Calculator.first.state
+  end
 end
