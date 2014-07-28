@@ -5,11 +5,11 @@ BlogApp::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
 
-   root 'calculator#index'
+   root 'client#view'
 
   # Example of regular route:
    put 'calculator' => 'calculator#update'
-   namespace :api do 
+   namespace :api do
     put 'calculator' => 'calculator#update'
     post 'calculator' => 'calculator#create'
    end
