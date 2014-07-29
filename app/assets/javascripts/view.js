@@ -17,7 +17,7 @@ Calculator.prototype={
     },
 
     observeButtonClick:function(){
-        this.submitButton.click(_.bind(this.updateCalculator, this));
+        this.submitButton.click(_.bind(this.callUpdate, this));
     },
 
     callCreate:function(){
@@ -32,10 +32,22 @@ Calculator.prototype={
         if (xhr.status == 201)
         {
             this.resultHistory.append("<h4>Calculator created</h4>");
+            this.calculatorCreated = true;
         }
         else if(xhr.status == 200){
             this.resultHistory.append("<h4>Calculator found</h4>");
+            this.calculatorCreated = true;
         }
+    },
+
+    callUpdate:function(){
+      var self = this;
+      if(!self.updateCalculator) {
+          self.callCreate();
+      }
+      else {
+          self.updateCalculator();
+      }
     },
 
     updateCalculator:function(){
@@ -61,7 +73,6 @@ Calculator.prototype={
         this.observers.on("calculator:updated",_.bind(observer.handleUpdateEvent, observer));
     },
     handleUpdateEvent:function(event,command,resultState) {
-
         this.appendToHistory(command, resultState);
     }
 }
