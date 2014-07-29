@@ -1,4 +1,5 @@
 class Calculator < ActiveRecord::Base
+  belongs_to :user
  def +(value)
     self.state=self.state+ value
     self.save!
@@ -6,7 +7,7 @@ class Calculator < ActiveRecord::Base
  end
 
  def -(value)
- 	self.state=self.state - value
+ 	  self.state=self.state - value
     self.save!
     self.state
  end

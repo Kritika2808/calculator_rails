@@ -105,6 +105,6 @@ Calculators.prototype = {
 
 $(document).ready(function() {
 
-     calculators =new Calculators("#addCalculatorButton");
+     new Calculators("#addCalculatorButton");
 
 });

@@ -5,24 +5,25 @@
   <title>Consumer api</title>
 </head>
 <body>
-<h2>Calculator view</h2>
+<% if user_signed_in? %>
+    <h2>Calculator view</h2>
 
-<input type="button" value="Add Calculator" id="addCalculatorButton"/>
-
-
-       <div id="template" style="visibility:hidden">
-        <div class="calculator">
-
-              Enter your command: <input type="text" class="inputCommand"/></br>
-              <input type="button" value="Calculate" class="submitButton"/>
-              <div class="resultHistory"></div>
-          <hr style="color:blueviolet">
-        </div>
-       </div>
-
-<div class="baseDiv">
-</div>
+    <input type="button" value="Add Calculator" id="addCalculatorButton"/>
 
 
+           <div id="template" style="visibility:hidden">
+            <div class="calculator">
+
+                  Enter your command: <input type="text" class="inputCommand"/></br>
+                  <input type="button" value="Calculate" class="submitButton"/>
+                  <div class="resultHistory"></div>
+              <hr style="color:blueviolet">
+            </div>
+           </div>
+
+    <div class="baseDiv">
+    </div>
+<% end %>
+</body>
 </body>
 </html>

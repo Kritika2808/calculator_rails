@@ -6,6 +6,8 @@ ruby '2.1.2'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.8'
 
+gem 'devise'
+
 # Use sqlite3 as the database for Active Record
 gem 'jslint_on_rails', group: [:development, :test]
 

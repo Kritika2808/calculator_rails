@@ -2,7 +2,7 @@ module Api
 	class CalculatorController < ApplicationController
 
 		def update
-		  calculator=Calculator.first
+		  calculator=Calculator.find_by_user_id(current_user.id)
 		  if calculator
 			command=params[:command]
 			parser = Parser.new(command)
@@ -15,10 +15,10 @@ module Api
 		end
 
 	  def create
-	    if Calculator.first
+	    if (Calculator.find_by_user_id(current_user.id)!=nil)
 	      head :ok
       else
-        Calculator.create({:state => 0})
+        Calculator.create({:state => 0,:user_id => current_user.id})
         head :created
       end
     end
