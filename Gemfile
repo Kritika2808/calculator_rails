@@ -7,7 +7,11 @@ ruby '2.1.2'
 gem 'rails', '4.0.8'
 
 # Use sqlite3 as the database for Active Record
-group :development, :test do
+gem 'jslint_on_rails', group: [:development, :test]
+
+group :test do
+  gem 'simplecov', require: false, group: :test
+  gem 'metric_fu'
   gem 'sqlite3'
   gem 'rspec-rails'
 end

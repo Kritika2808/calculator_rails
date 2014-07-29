@@ -10,7 +10,7 @@ var Calculator = function(templateId){
     this.resultHistory = $(calculator).find(".resultHistory");
     this.observers=$({});
     this.initialize();
-}
+};
 
 Calculator.prototype={
     initialize:function(){
@@ -27,7 +27,7 @@ Calculator.prototype={
         $.ajax({
             type: "POST",
             url: "http://localhost:3000/api/calculator"
-        }).success(_.bind(self.handleCallCreate,self))
+        }).success(_.bind(self.handleCallCreate,self));
     },
 
     handleCallCreate:function(result,statusText,xhr){
@@ -77,23 +77,34 @@ Calculator.prototype={
     handleUpdateEvent:function(event,command,resultState) {
         this.appendToHistory(command, resultState);
     }
-}
+};
+
+var Calculators = function(addButtonId){
+    this.calculatorList = [];
+    this.addCalculatorButton = $(addButtonId);
+    this.initialize();
+};
+
+Calculators.prototype = {
+    initialize:function(){
+        this.addCalculator();
+    },
+    addCalculator:function(){
+        this.addCalculatorButton.click(_.bind(this.add, this));
+    },
+    add:function(){
+        var newCalculator=new Calculator('#template');
+            for(var i=0;i<this.calculatorList.length;i+=1)
+            {
+                this.calculatorList[i].registerObserver(newCalculator);
+                newCalculator.registerObserver(this.calculatorList[i]);
+            }
+        this.calculatorList.push(newCalculator);
+    }
+};
 
 $(document).ready(function() {
 
-    $(document).ready(function () {
-
-        var calculators=[];
-
-        $('#addCalculatorButton').click(function(){
-            var newCalculator=new Calculator('#template');
-            for(var i=0;i<calculators.length;i+=1)
-            {
-                calculators[i].registerObserver(newCalculator);
-                newCalculator.registerObserver(calculators[i]);
-            }
-            calculators.push(newCalculator);
-        })
-    });
+     calculators =new Calculators("#addCalculatorButton");
 
 });
