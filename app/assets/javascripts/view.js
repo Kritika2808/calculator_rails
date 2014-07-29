@@ -6,7 +6,8 @@ var Calculator = function(calculatorDiv){
     this.inputCommand = $(calculator).find(".inputCommand");
     this.submitButton = $(calculator).find(".submitButton");
     this.resultHistory = $(calculator).find(".resultHistory");
-    this.observerList=[];
+    this.calculatorState = false;
+    this.observers=$({});
     this.initialize();
 }
 
@@ -14,9 +15,7 @@ Calculator.prototype={
     initialize:function(){
         this.observeButtonClick();
     },
-    registerObserver:function(observer){
-        this.observerList.push(observer)
-    },
+
     observeButtonClick:function(){
         this.submitButton.click(_.bind(this.createCalculator, this));
     },
@@ -51,29 +50,41 @@ Calculator.prototype={
             url: "http://localhost:3000/api/calculator",
             data: {command : self.inputCommand.val()},
             success: function (result) {
-               $(self.resultHistory).append("<h4>The output for input command <i>"+self.inputCommand.val() +"</i> is: </h4>"+result.state+"<br><hr>");
-                $.each(self.observerList, function(index, value) {
-                    $(value.resultHistory).append("<h4>The output for input command <i>"+self.inputCommand.val() +"</i> is: </h4>"+result.state+"<br><hr>");
-                });
-
-                $("#result:even").css("background-color","darkcyan");
-                $("#result:odd").css("background-color","blue");
+                self.appendToHistory(self.inputCommand.val(),result.state);
+                self.state = result.state;
+                self.notifyObservers(self.inputCommand.val(),result.state);
             },
             error: function(){
                 console.log("error");
             }
         });
-    }
-    //,
-//    appendToHistory:function(){
-//        $(self.resultHistory).append("<h4>The output for input command <i>"+self.inputCommand.val() +"</i> is: </h4>"+result.state+"<br><hr>");
-//    }
+    },
+    appendToHistory:function(command,result){
+        $(this.resultHistory).append("<h4>The output for input command <i>"+command +"</i> is: </h4>"+result+"<br><hr>");
+    },
+    notifyObservers: function(command,resultState) {
+        this.observers.trigger("calculator:updated",[command,resultState]);
+    },
+    registerObserver : function(observer) {
+        var self = this;
+        this.observers.on("calculator:updated", function(event,command,resultState) {
 
+            observer.appendToHistory(command, resultState);
+        });
+
+    }
 }
 
 $(document).ready(function() {
-   var  calculator1 = new Calculator("calculatorDiv");
-   var  calculator2 = new Calculator("calculatorDiv2");
+    var  calculator1 = new Calculator("calculatorDiv");
+    var  calculator2 = new Calculator("calculatorDiv2");
+    var  calculator3 = new Calculator("calculatorDiv3");
     calculator1.registerObserver(calculator2);
+    calculator1.registerObserver(calculator3);
+
     calculator2.registerObserver(calculator1);
+    calculator2.registerObserver(calculator3);
+
+    calculator3.registerObserver(calculator1);
+    calculator3.registerObserver(calculator2);
 });
