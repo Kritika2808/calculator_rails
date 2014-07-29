@@ -1,8 +1,10 @@
 
 console.log("begin");
 
-var Calculator = function(calculatorDiv){
-    var calculator = $(calculatorDiv);
+var Calculator = function(templateId){
+
+    var calculator = $(templateId).find(".calculator").clone().appendTo( ".baseDiv" );
+
     this.inputCommand = $(calculator).find(".inputCommand");
     this.submitButton = $(calculator).find(".submitButton");
     this.resultHistory = $(calculator).find(".resultHistory");
@@ -78,15 +80,20 @@ Calculator.prototype={
 }
 
 $(document).ready(function() {
-    var  calculator1 = new Calculator("#calculatorDiv");
-    var  calculator2 = new Calculator("#calculatorDiv2");
-    var  calculator3 = new Calculator("#calculatorDiv3");
-    calculator1.registerObserver(calculator2);
-    calculator1.registerObserver(calculator3);
 
-    calculator2.registerObserver(calculator1);
-    calculator2.registerObserver(calculator3);
+    $(document).ready(function () {
 
-    calculator3.registerObserver(calculator1);
-    calculator3.registerObserver(calculator2);
+        var calculators=[];
+
+        $('#addCalculatorButton').click(function(){
+            var newCalculator=new Calculator('#template');
+            for(var i=0;i<calculators.length;i+=1)
+            {
+                calculators[i].registerObserver(newCalculator);
+                newCalculator.registerObserver(calculators[i]);
+            }
+            calculators.push(newCalculator);
+        })
+    });
+
 });
