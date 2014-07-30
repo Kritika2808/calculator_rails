@@ -1,4 +1,5 @@
 require 'rails_helper'
+
 describe CalculatorController do
   it "response to be 200 on put call" do
 	put :update, :command => "add 5"
